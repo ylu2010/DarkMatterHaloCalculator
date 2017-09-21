@@ -1,0 +1,112 @@
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+     equationNumbers: {  autoNumber: "AMS"  },
+     extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js", "color.js"]
+  }
+});
+</script>
+<script type="text/javascript"
+ src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+<html>
+  <head>
+    <title>Yu Lu's Halo Calculator</title>
+   <link rel="stylesheet" type="text/css" href="static/style.css">
+  </head>
+  <body>
+    <div class="pagetitle">
+      <h2>Yu Lu's Halo Calculator</h2>
+    </div>
+
+    <h3>Provide input parameters:</h3>
+    <form method=post action="">
+      <table>
+      {% for field in form %}
+        <tr>
+          <td>{{ field.label }}</td>
+          <td>{{ field|safe }}</td>
+          <td>{{field.description }}</td>
+          {% if field.errors %}
+            <ul class=errors>
+              {% for error in field.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </tr>
+      {% endfor %}
+      </table>
+    <p><input type=submit value=Compute>
+      <br />
+      <br />
+      Rvir =
+      {% if rvir != None %}
+      {{rvir}} \(kpc\)
+      {% endif %}
+      <br />
+      Vvir =
+      {% if vvir != None %}
+      {{vvir}} \(km\,s^{-1}\)
+      {% endif %}
+      <br />
+      Tvir =
+      {% if tvir != None %}
+      {{tvir}} K
+      {% endif %}
+    </form></p>
+
+    <p>
+      {% if result != None %}
+      <h4>Plot:</h4>
+      <img src="{{result}}">
+      {% endif %}
+    </p>
+
+
+    <h4> Notes: </h4>
+    <!-- notes about the calculations -->
+    <ul>
+
+      <li> The virial mass of a halo is defined as the mass enclosed by a sphere with a radius \( R_{\rm vir} \) within which
+      the enclosed mass has a over density of \(\Delta_{\rm c}(z)\) of the critical
+      density of the universe as the solution of the collapse of a spherical top-hat overdensity at virialized (Peebles 1980).
+      <br />
+      \( M_{\rm vir}(z) = {4\pi \over 3} \Delta_{\rm c}(z) \rho_{\rm crit}(z) R_{\rm vir}(z)^3 \),
+      <br />
+      where \( \rho_{\rm crit}(z) \) is the critical density of the universe at redshift z.
+      The value of \( \Delta_{\rm c}(z) \) depends on redshift and cosmology
+      through the parameter \(\Omega(z) = \Omega_0(1+z)^3/E(z)^2 \).
+      The Calculator adopts the fitting formulae proposed by Bryan & Norman (1998) for
+      the solution of the cases when \( \Omega_R= 0 \) (Eke et al. 1996),
+
+      <br />
+      \( \Delta_{\rm c} = 18\pi^2+82x-39x^2 \),
+      <br />
+      and for the solution of the cases when \( \Omega_\Lambda= 0 \) (Lacey & Cole 1993),
+      <br />
+      \( \Delta_{\rm c} = 18\pi^2+60x-32x^2 \),
+      <br />
+      where \( x=\Omega(z)-1 \). These are accurate to 1% in the range \( \Omega(z)=0.1-1\).
+      </li>
+
+      <li> The virial velocity of a halo is defined as the circular velocity of the halo at the virial radius,
+        <br />
+        \( V_{\rm vir} = \sqrt{ G M_{\rm vir} \over R_{\rm vir}} \).
+        <br />
+      </li>
+
+      <li> The virial temperature is defined as
+        <br />
+        \( T_{\rm vir} = {\mu m_p V_{\rm vir}^2 \over 2k} \approx 35.9 \left({V_{\rm vir} \over km\,s^{-1}}\right)^2, \)
+        <br />
+        where \(\mu\) is the mean molecule weight, which is taken to be 0.55,
+        \( m_p \) is proton mass,
+        \(k\) is the Boltzmann constant.
+      </li>
+    </ul>
+  </body>
+</html>
